@@ -4,23 +4,14 @@
 
 	let yesButton: HTMLButtonElement;
 	let noButton: HTMLButtonElement;
-	let accepted = false;
-	let randomizePosition = false;
-	let initialButtonSize = 2.25;
-	let initialFontSize = 1.5;
-	let randomX = Math.random() * 100;
-	let randomY = Math.random() * 100;
-	let randomPosition = `translate(${randomX}%, ${randomY}%)`;
-
-	function handleNoButtonClick() {
-		accepted = false;
-		initialButtonSize += 2.25;
-		initialFontSize += 0.5;
-		randomX = Math.random() * 100;
-		randomY = Math.random() * 100;
-		randomPosition = `translate(${randomX}%, ${randomY}%)`;
-		randomizePosition = true;
-	}
+	const getRandom = () => Math.random() * 100;
+	$: accepted = false;
+	$: randomizePosition = false;
+	$: initialButtonSize = 2.25;
+	$: initialFontSize = 1.5;
+	$: randomX = getRandom();
+	$: randomY = getRandom();
+	$: randomPosition = `translate(${randomX}%, ${randomY}%)`;
 </script>
 
 <svelte:head>
@@ -45,11 +36,10 @@
 			style={`transform: ${randomizePosition ? randomPosition : 'translateX(0)'};`}
 			class="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-destructive px-8 py-2 text-sm font-medium text-destructive-foreground shadow-sm transition-colors hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
 			on:click={() => {
-				accepted = false;
 				initialButtonSize += 2.25;
 				initialFontSize += 0.5;
-				randomX = Math.random() * 100;
-				randomY = Math.random() * 100;
+				randomX = getRandom();
+				randomY = getRandom();
 				randomPosition = `translate(${randomX}%, ${randomY}%)`;
 				randomizePosition = true;
 				yesButton.style.height = `${initialButtonSize}rem`;
