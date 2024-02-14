@@ -1,17 +1,30 @@
 <script lang="ts">
 	import cute from '$lib/assets/cute.gif';
 	import kiss from '$lib/assets/kiss.gif';
+	import { Confetti } from 'svelte-confetti';
+
+	const getRandom = (limit: number): number => Math.random() * limit;
+	const excuses: string[] = [
+		'No',
+		'Sorry',
+		"I can't",
+		'Maybe next time',
+		'I have a boyfriend',
+		'I have a girlfriend',
+		'I have a partner',
+		'I just want to be friends',
+		"I'm not ready for a relationship"
+	];
 
 	let yesButton: HTMLButtonElement;
 	let noButton: HTMLButtonElement;
-	const getRandom = () => Math.random() * 100;
+
 	$: accepted = false;
 	$: randomizePosition = false;
 	$: initialButtonSize = 2.25;
 	$: initialFontSize = 1.5;
-	$: randomX = getRandom();
-	$: randomY = getRandom();
-	$: randomPosition = `translate(${randomX}%, ${randomY}%)`;
+	$: randomPosition = `translate(${getRandom(100)}%, ${getRandom(100)}%)`;
+	$: randomExcuse = excuses[Math.floor(getRandom(excuses.length))];
 </script>
 
 <svelte:head>
@@ -19,9 +32,12 @@
 </svelte:head>
 
 <div class="flex h-screen flex-col items-center justify-center gap-4">
+	{#if accepted}
+		<Confetti />
+	{/if}
 	<img src={accepted ? kiss : cute} alt={accepted ? 'Kiss gif' : 'Cute gif'} class="h-40 w-40" />
 	<h1
-		class="font-cursive scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-primary lg:text-5xl"
+		class="scroll-m-20 text-center font-cursive text-4xl font-extrabold tracking-tight text-primary lg:text-5xl"
 	>
 		{accepted ? 'Thank you & I love you <3' : 'Will you be my valentine?'}
 	</h1>
@@ -38,14 +54,13 @@
 			on:click={() => {
 				initialButtonSize += 2.25;
 				initialFontSize += 0.5;
-				randomX = getRandom();
-				randomY = getRandom();
-				randomPosition = `translate(${randomX}%, ${randomY}%)`;
+				randomPosition = `translate(${getRandom(100)}%, ${getRandom(100)}%)`;
 				randomizePosition = true;
 				yesButton.style.height = `${initialButtonSize}rem`;
 				yesButton.style.width = `${initialButtonSize}rem`;
 				yesButton.style.fontSize = `${initialFontSize}rem`;
-			}}>No</button
+				randomExcuse = excuses[Math.floor(getRandom(excuses.length))];
+			}}>{randomExcuse}</button
 		>
 	</div>
 </div>
